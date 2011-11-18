@@ -319,7 +319,8 @@ class MiniExiftool
   end
 
   def parse_line line
-    if line =~ /^([^\t]+)\t(.*)$/
+    # work around any invalid characters by doing a manual conversion to UTF-8
+    if line.force_encoding("US-ASCII").encode("UTF-8",{:invalid => :replace}) =~ /^([^\t]+)\t(.*)$/
       tag, value = $1, $2
       case value
       when /^\d{4}:\d\d:\d\d \d\d:\d\d:\d\d/
