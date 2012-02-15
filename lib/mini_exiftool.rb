@@ -19,7 +19,6 @@ require 'pstore'
 require 'set'
 require 'shellwords'
 require 'time'
-require 'iconv'
 
 # Simple OO access to the Exiftool command-line application.
 class MiniExiftool
@@ -322,7 +321,7 @@ class MiniExiftool
   def parse_line line
     # work around any invalid characters by doing a manual conversion to UTF-8
     if !line.valid_encoding?
-      line = Iconv.conv('utf-8//IGNORE','utf-8',line)
+      line.encode('UTF-8', invalid: :replace, replace: '').encode('UTF-8')
     end
     
     if line =~ /^([^\t]+)\t(.*)$/
